@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  user_idx     BigInt  @id @default(autoincrement())
+  user_email   String  @unique
+  user_pswd    String
+  user_nm      String
+  user_allergy String?
+}
+
+model brand {
+  brand_idx   Int     @id @default(autoincrement())
+  brand_nm_ko String
+  brand_nm_en String?
+  menu        menu[]
+}
+
+model menu {
+  menu_idx          Int      @id @default(autoincrement())
+  brand_idx         Int?
+  menu_nm_ko        String
+  menu_nm_en        String
+  menu_desc         String
+  menu_allergy      String?
+  menu_has_caffeine Boolean?
+  menu_img_url      String
+  brand             brand?   @relation(fields: [brand_idx], references: [brand_idx])
+}
