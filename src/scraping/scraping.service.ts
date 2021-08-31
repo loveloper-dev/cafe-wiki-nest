@@ -14,7 +14,7 @@ export class ScrapingService extends PrismaClient {
     return 'web crawling and scraping!';
   }
 
-  @Cron('0 33 * * * *') // 27분 45초, 28분 45초...
+  @Cron('0 33 11 * * *') // 27분 45초, 28분 45초...
   handleCron() {
     this.logger.debug('Called when the current second is 45');
 

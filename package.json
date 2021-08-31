@@ -18,7 +18,9 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prestart:prod": "rimraf dist && npm run build",
+    "web": "npm run start:prod"
   },
   "dependencies": {
     "@nestjs/common": "^7.6.15",
@@ -27,6 +29,10 @@
     "@nestjs/schedule": "^1.0.1",
     "@prisma/client": "^2.29.1",
     "@types/cron": "^1.7.3",
+    "axios": "^0.21.1",
+    "cheerio": "^1.0.0-rc.10",
+    "fs": "^0.0.1-security",
+    "puppeteer": "^10.2.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6"
