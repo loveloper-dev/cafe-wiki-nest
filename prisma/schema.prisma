@@ -7,12 +7,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
-  user_idx     BigInt  @id @default(autoincrement())
-  user_email   String  @unique
-  user_pswd    String
-  user_nm      String
-  user_allergy String?
+model allergy {
+  allergy_idx Int    @id @default(autoincrement())
+  allergy_nm  String
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model allergy_ref {
+  allergy_idx Int?
+  allergy_ref String?
+
+  @@ignore
+}
+
+model allergy_unknown {
+  allergy_unknown_idx  Int     @id @default(autoincrement())
+  allergy_unknown_word String?
 }
 
 model brand {
@@ -22,8 +32,17 @@ model brand {
   menu        menu[]
 }
 
+model heart_rating {
+  menu_idx Int
+  user_idx BigInt
+  menu     menu   @relation(fields: [menu_idx], references: [menu_idx])
+  user     user   @relation(fields: [user_idx], references: [user_idx])
+
+  @@id([menu_idx, user_idx])
+}
+
 model menu {
-  menu_idx          Int      @id @default(autoincrement())
+  menu_idx          Int            @id @default(autoincrement())
   brand_idx         Int?
   menu_nm_ko        String
   menu_nm_en        String
@@ -31,5 +50,28 @@ model menu {
   menu_allergy      String?
   menu_has_caffeine Boolean?
   menu_img_url      String
-  brand             brand?   @relation(fields: [brand_idx], references: [brand_idx])
+  menu_orig_cd      String?        @unique
+  brand             brand?         @relation(fields: [brand_idx], references: [brand_idx])
+  heart_rating      heart_rating[]
+  star_rating       star_rating[]
+}
+
+model star_rating {
+  menu_idx    Int
+  user_idx    BigInt
+  star_rating Int
+  menu        menu   @relation(fields: [menu_idx], references: [menu_idx])
+  user        user   @relation(fields: [user_idx], references: [user_idx])
+
+  @@id([menu_idx, user_idx])
+}
+
+model user {
+  user_idx     BigInt         @id @default(autoincrement())
+  user_email   String         @unique
+  user_pswd    String
+  user_nm      String
+  user_allergy String?
+  heart_rating heart_rating[]
+  star_rating  star_rating[]
 }
